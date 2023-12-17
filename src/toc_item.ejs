@@ -1,0 +1,19 @@
+<%
+const slugify = (text) => text.replace(/\s/g, "-");
+const slug = slugify(entry.name);
+%>
+
+
+<li>
+    <a href="#<%= slug %>">
+        <%= entry.name %>
+    </a>
+
+    <% if (entry.children.length) { %>
+        <ul>
+            <% for (const subentry of entry.children) { %>
+                <%- include('toc_item', {entry: subentry}) %>
+            <% } %>
+        </ul>
+    <% } %>
+</li>
