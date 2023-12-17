@@ -9,7 +9,7 @@ To import the theme into Trilium, follow these steps:
 
 1. Right-click below the note where you want to store your blog.
 2. Select "Import into note".
-3. In the pop-up window, select the zip package downloaded in step 1 and uncheck all options under "Options".
+3. In the pop-up window, select the zip package downloaded in step one and uncheck "Safe import" under the "Options" section.
 4. Click "Import".
 
 If the import is successful, the notes with the following directory structure will appear in your notes:
