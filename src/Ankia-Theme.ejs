@@ -3,10 +3,13 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <% if (note.hasLabel("motto")) { %>
   <meta name="description" content="<%= note.getLabelValue("motto") %>">
   <% } %>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="api/notes/<%= note.getRelation("prismCSS").value %>/download" rel="stylesheet">
+  <script type="module" src="api/notes/<%= note.getRelation("prismJS").value %>/download"></script>
   <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css" media="print" onload="this.media='all'">
   <% if (note.hasRelation("shareFavicon")) { %>
   <link rel="shortcut icon" href="api/notes/<%= note.getRelation("shareFavicon").value %>/download">
@@ -33,7 +36,19 @@ const slugify = (text) => text.replace(/\s/g, "-");
 content = content.replaceAll(headingRe, (...match) => {
     match[0] = match[0].replace(match[3], `<a id="${slugify(match[2])}" class="toc-anchor" name="${slugify(match[2])}" href="#${slugify(match[2])}">※</a>${match[3]}`);
     return match[0];
-});
+}).replaceAll(/class="language-text-x-(\w+)"/g , (...match) => {
+    match[0] = match[0].replace("-text-x", "");
+    return match[0];
+}).replaceAll( /class="language-text-(\w+)"/g , (...match) => {
+    match[0] = match[0].replace("-text", "");
+    return match[0];
+}).replaceAll( /class="language-application-x-(\w+)"/g , (...match) => {
+    match[0] = match[0].replace("-application-x", "");
+    return match[0];
+}).replaceAll( /class="language-application-(\w+)"/g , (...match) => {
+    match[0] = match[0].replace("-application", "");
+    return match[0];
+}).replaceAll("language-application-javascript-env-backend" , "language-javascript").replaceAll("language-application-javascript-env-frontend" , "language-javascript");
 %>
 
 <body data-note-id="<%= note.noteId %>" data-ancestor-note-id="<%= subRoot.note.noteId %>">
@@ -88,7 +103,7 @@ content = content.replaceAll(headingRe, (...match) => {
       <% if (subRoot.note.hasLabel("enableReward")) { %>
       <div id="rewardContainer">
         <button id="rewardBtn">❤️支持博主</button>
-        <p style="font-size: smaller;" class="coffee">“觉得有帮助的话，不妨请我喝杯咖啡~”</p>
+        <p style="font-size: smaller;" class="coffee">“您的支持是我持续分享的动力”</p>
         <div id="rewardImgContainer">
           <div class="singleImgContainer">
             <img class="rewardImg" src="api/images/<%= subRoot.note.getRelation("wechatPay").value %>/微信收款码" alt="微信收款码" />
@@ -292,7 +307,6 @@ content = content.replaceAll(headingRe, (...match) => {
       <span>Copyright © <%= subRoot.note.getLabelValue("blogStartTime").slice(0,4) %>-<%= new Date().getFullYear() %>. All Rights Reserved.</span>
     </div>
   </div>
-
 </body>
 
 </html>

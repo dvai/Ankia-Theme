@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const menu = document.getElementById('menu');
 
     if (toggleMenuButton && menu) {
-        toggleMenuButton.addEventListener('click', () => menu.classList.toggle('showMenu'));
+        toggleMenuButton.addEventListener('click', () => menu.classList.toggle("showMenu"));
     }
 }, false);
 document.addEventListener('DOMContentLoaded', () => {
     var prevScrollPos = window.pageYOffset;
-    const scrollDistance = 5;
+    const scrollDistance = 10;
 
     window.onscroll = function () {
         var currentScrollPos = window.pageYOffset;

@@ -196,16 +196,8 @@ pre, code {
 }
 
 .showMenu {
-    display: block !important;
-    opacity: 1 !important;
-    padding: 50px 0px 0px 0px !important;
-    margin: 0px 0px 0px -7px !important;
-    max-width: 100% !important;
-    min-width: 100% !important;
-}
-
-.showMenu div {
-    margin: 10px 60px 10px 60px !important;
+    box-shadow: 7px 3px 16px 0 rgb(56 62 62 / 24%);
+    transform: translateX(0) !important;
 }
 
 #content li {
@@ -247,6 +239,11 @@ a {
         z-index: 100;
     }
 
+    #menu div {
+        font-size: smaller !important;
+        margin: 10px !important;
+    }
+
     #main {
         padding: 10px 10px 10px 10px !important;
     }
@@ -276,10 +273,20 @@ a {
         display: none !important;
     }
 
+    #menu {
+        display: block !important;
+        opacity: 1 !important;
+        padding: 50px 0px 0px 0px !important;
+        margin: 0px 0px 0px -7px !important;
+        max-width: 50% !important;
+        min-width: 50% !important;
+        transform: translateX(-100%);
+        transition: transform 200ms ease;
+    }
+
     #menu-content,
     #toc-pane,
-    #toc-content,
-    #menu {
+    #toc-content {
         opacity: 0;
         display: none;
     }
@@ -293,15 +300,28 @@ a {
     padding-left: 0px !important;
 }
 
-.ck-content .image img {
+#content img {
+    max-width: 80%;
+    height: auto;
     display: block;
     margin: 0 auto;
-    max-width: 24rem;
-    height: auto;
+    max-height: 30rem;
+    width: auto;
+}
+
+img {
+    width: 100%
 }
 
 .image_resized {
     width: auto !important;
+}
+
+figcaption {
+    display: flex;
+    justify-content: center;
+    font-size: smaller;
+    color: #707173;
 }
 
 hr {
@@ -433,6 +453,7 @@ nav#childLinks {
     height: 1rem;
     display: flex;
     justify-content: flex-end;
+    margin-bottom: 30px;
 }
 
 #blogItems {
@@ -466,9 +487,6 @@ nav#childLinks {
     border-radius: 5px;
 }
 
-img {
-    max-width: 100%;
-}
 
 .image {
     height: 100%;
@@ -487,12 +505,8 @@ iframe.pdf-view {
 }
 
 .ck-content pre {
-    color: #01b0bf !important;
     font-size: 80%;
     background: hsl(0deg 0% 26.67%);
-    padding: 1em;
-    margin: 0.5rem auto 0.5rem;
-    border-radius: 5px;
 }
 
 :root {
@@ -572,10 +586,10 @@ ul#toc {
 }
 
 .fLink img {
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 5px !important;
+    margin-bottom: 10px !important;
 }
 
 .fLink>#fLinkTitle {
