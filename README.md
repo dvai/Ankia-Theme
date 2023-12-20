@@ -3,6 +3,17 @@ Ankia-Theme is a blog theme based on the sharing feature of [Trilium](https://gi
 
 中文使用指南：[点我跳转](https://www.ankia.top/3LdIi2f30Pan)
 
+## Features of this theme
+
+Compared to the built-in sharing feature of Trilium, this theme has the following features:
+
+- Complete blogging system
+- Clean and elegant blog interface
+- Optimized reading experience for the main content
+- Added table of contents for the main content
+- Support for one-click publishing of blog posts
+- Support for code highlighting
+
 ## Installation
 
 To import the theme into Trilium, follow these steps:
@@ -144,3 +155,48 @@ Publishing a blog post is simple. Just click the "Publish" button, and it will b
 To pin a blog post, add the following attribute to the desired blog post. This will make it appear at the top of the "Timeline" and its corresponding category.
 
 *   `#blogPostTop`
+
+Code highlighting
+
+This theme comes with the PrismJS code highlighting plugin, which currently supports HTML, XML, SVG, MathML, SSML, Atom, RSS, CSS, JavaScript, EJS, Go, C, C++, Python, ini, Bash, Json, Shell, SQL, TypeScript and YAML.
+
+Example:
+
+HTML:
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Example Page</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+    <p>This is an example page.</p>
+
+    <a href="#">Click me</a>
+
+    <button class="button">Submit</button>
+
+    <div id="time"></div>
+</body>
+</html>
+```
+
+
+JS:
+```javascript
+// Define a function to calculate the sum of two numbers
+function addNumbers(a, b) {
+  return a + b;
+}
+
+// Call the function and output the result
+console.log(addNumbers(5, 3));
+
+// Get the current time and display it on the page
+var currentTime = new Date();
+document.getElementById("time").innerHTML = "Current time is: " + currentTime;
+
+```
