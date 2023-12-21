@@ -278,8 +278,8 @@ a {
         opacity: 1 !important;
         padding: 50px 0px 0px 0px !important;
         margin: 0px 0px 0px -7px !important;
-        max-width: 50% !important;
-        min-width: 50% !important;
+        max-width: 250px !important;
+        width: 50% !important;
         transform: translateX(-100%);
         transition: transform 200ms ease;
     }
@@ -476,6 +476,7 @@ nav#childLinks {
 
 .ck-content pre code {
     background-color: #ffffff00;
+    white-space: pre-wrap;
 }
 
 .ck-content blockquote {
@@ -487,6 +488,21 @@ nav#childLinks {
     border-radius: 5px;
 }
 
+.ck-content .text-tiny {
+    font-size: small;
+}
+
+.ck-content .text-small {
+    font-size: smaller;
+}
+
+.ck-content .text-big {
+    font-size: large;
+}
+
+.ck-content .text-huge {
+    font-size: larger;
+}
 
 .image {
     height: 100%;
