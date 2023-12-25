@@ -7,12 +7,13 @@ Ankia-Theme is a blog theme based on the sharing feature of [Trilium](https://gi
 
 Compared to the built-in sharing feature of Trilium, this theme has the following features:
 
-- Complete blogging system
-- Clean and elegant blog interface
+- Having a complete blog system
+- The blog interface is simple and elegant
+- Perfectly adapted for mobile devices
 - Optimized reading experience for the main content
 - Added table of contents for the main content
-- Support for one-click publishing of blog posts
-- Support for code highlighting
+- Supports one-click publishing of blogs
+- Supports code highlighting
 
 ## Installation
 
@@ -26,15 +27,22 @@ To import the theme into Trilium, follow these steps:
 If the import is successful, the notes with the following directory structure will appear in your notes:
 
 ```text-plain
-- My Blog
+- My blog
+    - Moments
+    - Article categories
+    - Recommended reading
     - Timeline
-    - Friends' Links
+    - Friends' links
     - About
     - Unpublished
-    - Ankia-Theme
+    - Ankia Theme
 ```
 
 > Note: These notes form the basic structure of a blog. Please do not delete them.
+
+Turn on the "Shared" switch of my blog notes to access the blog interface preview.
+
+![](./imgs/Preview.png)
 
 ## Configuration
 
@@ -126,7 +134,7 @@ User Guide
 
 ## Creating Blog Categories
 
-Creating blog categories is simple. Create child notes under the "My Blog" note and assign the following attributes to those notes:
+Creating blog categories is very simple. Just create sub-notes under the "Article categories" note, and then assign the following attributes to that note:
 
 *   `#categoryName = xxx` - This attribute is used by the "blogStateChange" script to find the corresponding category. It is recommended to keep it consistent with the category title.
 *   `#sorted=date #sortDirection=desc` - (Optional but recommended) Sort blog posts by publication date in descending order.
