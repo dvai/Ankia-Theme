@@ -7,18 +7,77 @@ async function fetchNote(noteId = null) {
 
   return await resp.json();
 }
-
 document.addEventListener(
   "DOMContentLoaded",
   () => {
     const toggleMenuButton = document.getElementById("toggleMenuButton");
-    const menu = document.getElementById("menu");
+    const mobileMenuContainer = document.getElementById("mobileMenuContainer");
+    const bloggerInfoCard = document.getElementById("bloggerInfoCard");
+    const menuCard = document.getElementById("menuCard");
 
-    if (toggleMenuButton && menu) {
-      toggleMenuButton.addEventListener("click", () =>
-        menu.classList.toggle("showMenu")
-      );
+    let isCardsAdded = false;
+
+    toggleMenuButton.addEventListener("click", () => {
+      if (!isCardsAdded) {
+        bloggerInfoCard.style.setProperty("display", "flex", "important");
+        menuCard.style.setProperty("display", "flex", "important");
+        mobileMenuContainer.appendChild(bloggerInfoCard);
+        mobileMenuContainer.appendChild(menuCard);
+        isCardsAdded = true;
+      } else {
+        mobileMenuContainer.removeChild(bloggerInfoCard);
+        mobileMenuContainer.removeChild(menuCard);
+        isCardsAdded = false;
+      }
+
+      mobileMenuContainer.classList.toggle("showMenu");
+    });
+  },
+  false
+);
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    function addHoverControl(buttonId, dropDownId) {
+      const button = document.getElementById(buttonId);
+      const dropDown = document.getElementById(dropDownId);
+
+      if (!button) {
+        return;
+      }
+
+      let isHovering = false;
+
+      button.addEventListener("mouseover", function () {
+        isHovering = true;
+        dropDown.style.display = "flex";
+      });
+
+      button.addEventListener("mouseout", function () {
+        isHovering = false;
+        setTimeout(function () {
+          if (!isHovering) {
+            dropDown.style.display = "none";
+          }
+        }, 200);
+      });
+
+      dropDown.addEventListener("mouseover", function () {
+        isHovering = true;
+      });
+
+      dropDown.addEventListener("mouseout", function () {
+        isHovering = false;
+        setTimeout(function () {
+          if (!isHovering) {
+            dropDown.style.display = "none";
+          }
+        }, 200);
+      });
     }
+
+    addHoverControl("transmission", "transmissionDropDown");
+    addHoverControl("category", "categoryDropDown");
   },
   false
 );
@@ -31,11 +90,14 @@ document.addEventListener(
     window.onscroll = function () {
       var currentScrollPos = window.pageYOffset;
       const navigationBar = document.getElementById("navigationBar");
+      if (currentScrollPos < 100) {
+        return;
+      }
       if (prevScrollPos > currentScrollPos) {
         navigationBar.classList.remove("hide");
       } else if (
         currentScrollPos - prevScrollPos > scrollDistance &&
-        !document.querySelector("#menu.showMenu")
+        !document.querySelector("#mobileMenuContainer.showMenu")
       ) {
         navigationBar.classList.add("hide");
       }

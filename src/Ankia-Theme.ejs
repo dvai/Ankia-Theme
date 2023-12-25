@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+<% 
+    const bloggerName =  subRoot.note.getLabelValue("bloggerName") ;
+    const siteName =  subRoot.note.getLabelValue("siteName") ;
+    const siteDescription =  note.getLabelValue("summary") ;
+    const bloggerAvatar  = `api/images/${subRoot.note.getRelation("bloggerAvatar").value}/博主头像`
+    %>
 
 <head>
   <meta charset="UTF-8">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <% if (note.hasLabel("shareDescription")) { %>
-  <meta name="shareDescription" content="<%= note.getLabelValue("shareDescription") %>">
-  <% } %>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title><%= `${note.title} - ${siteName}` %></title>
+  <meta name="author" content="<%= bloggerName%>">
+  <meta name="copyright" content="<%= bloggerName%>">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#5986D1">
+  <meta name="description" content="<%= siteDescription %>">
   <link href="api/notes/<%= note.getRelation("prismCSS").value %>/download" rel="stylesheet">
   <script type="module" src="api/notes/<%= note.getRelation("prismJS").value %>/download"></script>
   <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css" media="print" onload="this.media='all'">
@@ -26,7 +36,6 @@
   <meta name="robots" content="noindex,follow" />
   <% } %>
   <%- header %>
-  <title><%= `${note.title} - ${subRoot.note.getLabelValue("siteName")}` %></title>
 </head>
 
 <%
@@ -52,40 +61,63 @@ content = content.replaceAll(headingRe, (...match) => {
 %>
 
 <body data-note-id="<%= note.noteId %>" data-ancestor-note-id="<%= subRoot.note.noteId %>">
+  <div id="mobileMenuContainer"></div>
+  <div id="globalBackground" style=""><img id="globalBackgroundImg" src="api/images/<%= subRoot.note.getRelation("homepageBG").value %>/主页背景" style="position: fixed;margin-left: auto;margin-right: auto;display: flex;-o-object-fit: cover;object-fit: cover;" width="auto" height="100%">
+    <div class="overlay"></div>
+  </div>
   <div id="navigationBar" class="scroll-hide">
     <div id="siteTitle">
       <img src="api/images/<%= subRoot.note.getRelation("shareFavicon").value %>/logo.svg" alt="Logo" />
-      <a href="./Index" title="返回主页"><%= subRoot.note.getLabelValue("siteName") %></a>
+      <a href="./Index" title="返回主页"><%= siteName %></a>
     </div>
     <div id="navigationItems">
-      <div>
-        <a href="./Index" title="时间线">时间线</a>
+      <div class="navigationItemsStyle">
+        <a href="./Index" title="时间线" class="menuLinkStyle">时间线</a>
       </div>
-      <div>
-        <a href="./messageBoard" title="留言板">留言板</a>
+      <div class="navigationItemsStyle">
+        <a id="category" title="分类" class="menuLinkStyle">分类<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="
+    width: 10px;
+    height: 10px;
+    margin-left: 2px;
+">
+            <path d="M3 8L12 17L21 8"></path>
+          </svg></a>
+        <div id="categoryDropDown" class="dropDownStyle">
+          <% subRoot.note.getVisibleChildNotes()[1].getVisibleChildNotes().forEach(function (childNote) { %>
+          <a href="<%= childNote.shareId %>" title="<%= childNote.title %>" style="display: flex;justify-content: flex-start;align-items: center;" class="menuLinkStyle"><%= childNote.title %>
+            <div id="articleCount"><%= childNote.getVisibleChildNotes().length %></div>
+          </a>
+          <% })%>
+        </div>
       </div>
-      <div>
-        <a href="./fLinks" title="友链">友链</a>
+      <div class="navigationItemsStyle">
+        <a href="./messageBoard" title="留言板" class="menuLinkStyle">留言板</a>
       </div>
-      <% if (subRoot.note.hasLabel("enableTravellings")) { %>
-      <div>
-        <a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener" title="开往-随机开往一个博客">开往</a>
+      <div class="navigationItemsStyle">
+        <a href="./fLinks" title="友链" class="menuLinkStyle">友链</a>
+      </div>
+      <% if (subRoot.note.hasLabel("enableTravellings") || subRoot.note.hasLabel("enableForeverblog"))  { %>
+      <div class="navigationItemsStyle">
+        <a id="transmission" title="传送门" class="menuLinkStyle">开往<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="
+    width: 10px;
+    height: 10px;
+    margin-left: 2px;
+">
+            <path d="M3 8L12 17L21 8"></path>
+          </svg></a>
+        <div id="transmissionDropDown" class="dropDownStyle">
+          <a href="https://www.foreverblog.cn/go.html" target="_blank" rel="noopener" title="十年之约" class="menuLinkStyle">虫洞</a>
+          <a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener" title="开往-随机开往一个博客" class="menuLinkStyle">开往</a>
+        </div>
       </div>
       <% } %>
-      <% if (subRoot.note.hasLabel("enableForeverblog")) { %>
-      <div>
-        <a href="https://www.foreverblog.cn/go.html" target="_blank" rel="noopener" title="十年之约">虫洞</a>
+      <div class="navigationItemsStyle">
+        <a href="./about" title="关于" class="menuLinkStyle">关于</a>
       </div>
-      <% } %>
-      <div>
-        <a href="./about" title="关于">关于</a>
-      </div>
-
       <div id="toggleMenuButton"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
           <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
         </svg></div>
     </div>
-
   </div>
   <div id="layout">
     <div id="main">
@@ -178,23 +210,42 @@ content = content.replaceAll(headingRe, (...match) => {
         <% } %>
       </nav>
       <% } else if (isEmpty) { %>
-      <p>This note has no content.</p>
+      <p>施工中...</p>
       <% } %>
     </div>
-    <div id="menu-content"></div>
-    <nav id="menu">
-
-      <p>
-        <strong>菜单</strong>
-      </p>
-      <hr>
-      <%- include('tree_item', {note: subRoot.note, branch: subRoot.branch, activeNote: note}) %>
-    </nav>
-
+    <div id=menuCard class="cardContainerStyle" style="left:40px">
+      <% if(subRoot.note.hasLabel("enablePersonalDynamic")) {%>
+      <div id="recentActivityCard" class="bloggerInfoCardStyle">
+        <a href="./recentActivity" style="color:black" title="浏览全部说说">
+          <div class="bloggerInfoTitleStyle">说说</div>
+        </a>
+        <hr>
+        <% subRoot.note.getVisibleChildNotes()[0].getVisibleChildNotes().forEach((childNote)=>{%>
+        <div class="cardItemLinkStyle">
+          <b style="font-size: 10px;"><%= childNote.getLabelValue("date").substring(5) %></b>
+          <a href="./<%= childNote.shareId %>" title="<%=  childNote.title %>" class="menuLinkStyle"><%= childNote.title %></a>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+      <% if(subRoot.note.hasLabel("enableRecommendedReading")) {%>
+      <div id="recommendedReadingCard" class="bloggerInfoCardStyle">
+        <a href="./recommendedReading" style="color:black" title="浏览全部推荐">
+          <div class="bloggerInfoTitleStyle">推荐阅读</div>
+        </a>
+        <hr>
+        <% subRoot.note.getVisibleChildNotes()[2].getVisibleChildNotes().forEach((childNote)=>{%>
+        <div class="cardItemLinkStyle">
+          <b style="font-size: 10px;"><%= childNote.getLabelValue("date").substring(5) %></b>
+          <a href="./<%= childNote.shareId %>" title="<%=  childNote.title %>" class="menuLinkStyle"><%= childNote.title %></a>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+    <% if (headingMatches.length > 1){ %>
     <!-- 目录插件 -->
-    <div id="toc-content"></div>
     <%
-        if (headingMatches.length > 1) {
             const level = (m) => parseInt(m[1].replace(/[<h>]+/g, ""));
 
             const toc = [
@@ -217,7 +268,7 @@ content = content.replaceAll(headingRe, (...match) => {
                 const target = getLevelArr(level(headingMatches[m]));
                 target.push(makeEntry(headingMatches[m]));
             }
-        %>
+            %>
     <div id="toc-pane">
       <strong>目录</strong>
       <ul id="toc">
@@ -226,11 +277,14 @@ content = content.replaceAll(headingRe, (...match) => {
         <% } %>
       </ul>
     </div>
-    <% } %>
-    <div id="bloggerInfoCard">
+
+    <% }else{ %>
+    <div id="bloggerInfoCard" class="cardContainerStyle">
       <div id="bloggerInfo" class="bloggerInfoCardStyle">
-        <img src="api/images/<%= subRoot.note.getRelation("bloggerAvatar").value %>/博主头像">
-        <div id="bloggerInfoName" class="bloggerInfoTitleStyle"><%= subRoot.note.getLabelValue("bloggerName") %></div>
+        <a href="./about" title="关于博主">
+          <img src=<%= bloggerAvatar %> href="./about">
+        </a>
+        <div id="bloggerInfoName" class="bloggerInfoTitleStyle"><%= bloggerName%></div>
         <div id="motto" class="bloggerInfoContentStyle"><%= subRoot.note.getLabelValue("motto") %></div>
       </div>
       <div id="otherPlatformBar" class="bloggerInfoCardStyle">
@@ -259,12 +313,12 @@ content = content.replaceAll(headingRe, (...match) => {
         <a class="platformStyle" target="_blank" rel="noopener" title="sspai" href="<%= subRoot.note.getLabelValue("sspaiLink") %>"><svg data-v-b3f1de54="" data-v-fda2b58a="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" viewBox="0 0 36 36">
             <title>少数派</title>
             <path data-v-b3f1de54="" d="M18,0C8.1,0,0,8.1,0,18s8.1,18,18,18s18-8.1,18-18S27.9,0,18,0z M26.9,11.6c0,0.2-0.1,0.3-0.2,0.5
-    c-0.1,0.1-0.3,0.2-0.4,0.2l-3.3,0.6v8.3c0,0.5,0.1,1,0.3,1.4l2.1,4c0.1,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.2-0.1,0.3
-    c-0.1,0.1-0.1,0.2-0.3,0.2c-0.1,0.1-0.2,0.1-0.3,0.1H23c-0.1,0-0.3,0-0.4-0.1c-0.1-0.1-0.2-0.2-0.3-0.3l-2.1-3.9
-    c-0.2-0.5-0.4-1-0.4-1.5v-8.4l-4.6,0.8v11.4c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.2,0.3-0.4,0.4l-1.3,0.8c-0.1,0.1-0.3,0.1-0.4,0.1
-    s-0.3,0-0.4-0.1c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.1-0.3-0.1-0.4v-12l-3.4,0.6c-0.1,0-0.2,0-0.4,0c-0.1,0-0.2-0.1-0.3-0.2
-    C8.1,14.9,8,14.8,8,14.6c0-0.1-0.1-0.2,0-0.4l0.2-1.4c0-0.2,0.1-0.3,0.2-0.5c0.1-0.1,0.3-0.2,0.5-0.2l17.4-2.9c0.1,0,0.3,0,0.4,0
-    c0.1,0,0.2,0.1,0.3,0.2C26.9,9.5,27,9.6,27,9.7c0,0.1,0.1,0.2,0,0.4L26.9,11.6z" class="logo"></path>
+        c-0.1,0.1-0.3,0.2-0.4,0.2l-3.3,0.6v8.3c0,0.5,0.1,1,0.3,1.4l2.1,4c0.1,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.2-0.1,0.3
+        c-0.1,0.1-0.1,0.2-0.3,0.2c-0.1,0.1-0.2,0.1-0.3,0.1H23c-0.1,0-0.3,0-0.4-0.1c-0.1-0.1-0.2-0.2-0.3-0.3l-2.1-3.9
+        c-0.2-0.5-0.4-1-0.4-1.5v-8.4l-4.6,0.8v11.4c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.2,0.3-0.4,0.4l-1.3,0.8c-0.1,0.1-0.3,0.1-0.4,0.1
+        s-0.3,0-0.4-0.1c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.1-0.3-0.1-0.4v-12l-3.4,0.6c-0.1,0-0.2,0-0.4,0c-0.1,0-0.2-0.1-0.3-0.2
+        C8.1,14.9,8,14.8,8,14.6c0-0.1-0.1-0.2,0-0.4l0.2-1.4c0-0.2,0.1-0.3,0.2-0.5c0.1-0.1,0.3-0.2,0.5-0.2l17.4-2.9c0.1,0,0.3,0,0.4,0
+        c0.1,0,0.2,0.1,0.3,0.2C26.9,9.5,27,9.6,27,9.7c0,0.1,0.1,0.2,0,0.4L26.9,11.6z" class="logo"></path>
           </svg>
         </a>
         <% } %>
@@ -299,9 +353,14 @@ content = content.replaceAll(headingRe, (...match) => {
       </div>
       <div id="announcement" class="bloggerInfoCardStyle">
         <div class="bloggerInfoTitleStyle">公告</div>
+        <hr>
         <div style="text-align: left;text-indent: 1em;" class="bloggerInfoContentStyle"><%= subRoot.note.getLabelValue("announcement") %></div>
       </div>
     </div>
+
+    <% } %>
+
+  </div>
   </div>
   <div id="footer">
     <hr>
