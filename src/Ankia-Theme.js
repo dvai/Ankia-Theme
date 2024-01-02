@@ -1,3 +1,9 @@
+/*!
+ * Ankia-Theme v1.3
+ * https://ankia.top/
+ *
+ * Licensed Apache-2.0 © 东东
+ */
 async function fetchNote(noteId = null) {
   if (!noteId) {
     noteId = document.body.getAttribute("data-note-id");
@@ -14,19 +20,23 @@ document.addEventListener(
     const mobileMenuContainer = document.getElementById("mobileMenuContainer");
     const bloggerInfoCard = document.getElementById("bloggerInfoCard");
     const menuCard = document.getElementById("menuCard");
+    const main = document.getElementById("main");
 
     let isCardsAdded = false;
 
     toggleMenuButton.addEventListener("click", () => {
+      toggleMenuButton.classList.toggle("active");
       if (!isCardsAdded) {
         bloggerInfoCard.style.setProperty("display", "flex", "important");
         menuCard.style.setProperty("display", "flex", "important");
         mobileMenuContainer.appendChild(bloggerInfoCard);
         mobileMenuContainer.appendChild(menuCard);
+        main.style.display = "none";
         isCardsAdded = true;
       } else {
         mobileMenuContainer.removeChild(bloggerInfoCard);
         mobileMenuContainer.removeChild(menuCard);
+        main.style.display = "block";
         isCardsAdded = false;
       }
 
@@ -38,19 +48,22 @@ document.addEventListener(
 document.addEventListener(
   "DOMContentLoaded",
   () => {
-    function addHoverControl(buttonId, dropDownId) {
-      const button = document.getElementById(buttonId);
-      const dropDown = document.getElementById(dropDownId);
-
-      if (!button) {
+    var navigationItems = document.querySelectorAll(".navigationItemsStyle");
+    // 为每个.navigationItemsStyle元素添加事件监听器
+    navigationItems.forEach(function (item) {
+      var button = item.querySelector(".menuLinkStyle");
+      var dropDown = item.querySelector(".dropDownStyle");
+      if (!button || !dropDown) {
         return;
       }
-
+      var svgElement = button.querySelector("svg");
       let isHovering = false;
 
       button.addEventListener("mouseover", function () {
         isHovering = true;
         dropDown.style.display = "flex";
+
+        svgElement.classList.add("unfolding");
       });
 
       button.addEventListener("mouseout", function () {
@@ -58,6 +71,7 @@ document.addEventListener(
         setTimeout(function () {
           if (!isHovering) {
             dropDown.style.display = "none";
+            svgElement.classList.remove("unfolding");
           }
         }, 200);
       });
@@ -71,13 +85,11 @@ document.addEventListener(
         setTimeout(function () {
           if (!isHovering) {
             dropDown.style.display = "none";
+            svgElement.classList.remove("unfolding");
           }
         }, 200);
       });
-    }
-
-    addHoverControl("transmission", "transmissionDropDown");
-    addHoverControl("category", "categoryDropDown");
+    });
   },
   false
 );
@@ -128,6 +140,93 @@ document.addEventListener(
         }
       });
     }
+  },
+  false
+);
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    const toc = document.getElementById("toc");
+    if (!toc) return;
+
+    const sections = document.querySelectorAll(
+      "#content h2, #content h3, #content h4, #content h5, #content h6"
+    );
+    const links = toc.querySelectorAll("a");
+
+    links.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const target = document.querySelector(link.getAttribute("href"));
+        if (target) target.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+    function changeLinkState() {
+      let index = sections.length;
+      while (--index && window.scrollY < sections[index].offsetTop) {}
+
+      links.forEach((link) => link.classList.remove("tocActive"));
+      links[index].classList.add("tocActive");
+    }
+
+    changeLinkState();
+    window.addEventListener("scroll", changeLinkState);
+  },
+  false
+);
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    if (!document.queryCommandSupported("copy")) {
+      return;
+    }
+
+    function flashCopyMessage(button, message) {
+      button.textContent = message;
+      setTimeout(function () {
+        button.textContent = "Copy";
+      }, 1000);
+    }
+
+    function selectText(node) {
+      var selection = window.getSelection();
+      var range = document.createRange();
+      range.selectNodeContents(node);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      return selection;
+    }
+
+    function addCopyButton(container) {
+      var copyButton = document.createElement("button");
+      copyButton.className = "copyButtonStyle";
+      copyButton.textContent = "Copy";
+      copyButton.setAttribute("title", "复制");
+
+      var codeElement = container.firstElementChild;
+      copyButton.addEventListener("click", function () {
+        try {
+          var selection = selectText(codeElement);
+          document.execCommand("copy");
+          selection.removeAllRanges();
+
+          flashCopyMessage(copyButton, "Copied!");
+        } catch (error) {
+          console && console.log(error);
+          flashCopyMessage(copyButton, "Failed");
+        }
+      });
+
+      container.appendChild(copyButton);
+    }
+
+    var preBlocks = document.querySelectorAll("pre");
+    Array.prototype.forEach.call(preBlocks, addCopyButton);
   },
   false
 );
