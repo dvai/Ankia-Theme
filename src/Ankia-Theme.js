@@ -1,5 +1,5 @@
 /*!
- * Ankia-Theme v1.3
+ * Ankia-Theme v1.4
  * https://ankia.top/
  *
  * Licensed Apache-2.0 © 东东
@@ -160,14 +160,14 @@ document.addEventListener(
         e.preventDefault();
         e.stopPropagation();
 
-        const target = document.querySelector(link.getAttribute("href"));
+        const target = document.getElementById(link.getAttribute("href").slice(1));
         if (target) target.scrollIntoView({ behavior: "smooth" });
       });
     });
 
     function changeLinkState() {
       let index = sections.length;
-      while (--index && window.scrollY < sections[index].offsetTop) {}
+      while (--index && window.scrollY < sections[index].offsetTop) { }
 
       links.forEach((link) => link.classList.remove("tocActive"));
       links[index].classList.add("tocActive");
@@ -230,3 +230,30 @@ document.addEventListener(
   },
   false
 );
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    const target = document.getElementById("onTop");
+    target.addEventListener("click", (e) => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  },
+  false
+);
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    //字数统计
+    const content = document.getElementById("content");
+    if (!content) { return }
+    const articleWordCount = document.getElementById("articleWordCount");
+    articleWordCount.innerText = content.innerText.split(/[\s-+:,/\\]+/).filter(chunk => chunk !== '').join('').length;
+  },
+  false
+);
+

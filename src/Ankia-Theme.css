@@ -1,5 +1,5 @@
 /*!
- * Ankia-Theme v1.3
+ * Ankia-Theme v1.4
  * https://ankia.top/
  *
  * Licensed Apache-2.0 © 东东
@@ -89,14 +89,14 @@ code {
 #toggleMenuButton {
   border: none;
   background: #ffffff00;
-  right: 10px;
-  position: fixed;
-  width: 25px;
-  height: 25px;
   z-index: 1000;
+  width: 1em;
+  height: 1em;
   display: none;
   color: black;
   cursor: pointer;
+  position: absolute;
+  right: 0.5em;
 }
 
 #toggleMenuButton .feather-menu line {
@@ -260,6 +260,13 @@ a {
     width: 100% !important;
   }
 
+  #onTop {
+    right: 10px !important;
+    width: 25px !important;
+    height: 25px !important;
+    bottom: 50px !important;
+  }
+
   .platformStyle {
     margin: 0px 3px !important;
   }
@@ -325,7 +332,7 @@ a {
   }
 
   #toggleMenuButton {
-    display: block;
+    display: flex;
   }
 
   .ck-content .image img {
@@ -512,7 +519,7 @@ nav#childLinks {
 }
 
 .blogMetadate {
-  margin: 5px 10px 0px 0px;
+  margin-right: 1.2em;
   font-size: small;
   font-weight: 500;
   display: flex;
@@ -521,6 +528,7 @@ nav#childLinks {
   cursor: pointer;
   flex-wrap: wrap;
   color: var(--metadateColor) !important;
+  align-items: center;
 }
 
 .blogMetadateItems {
@@ -975,6 +983,27 @@ ul#toc {
   background-color: #7777775c;
   text-align: center;
 }
+
 .copyButtonStyle:hover {
   background-color: #666;
+}
+
+#onTop {
+  position: fixed;
+  display: flex;
+  bottom: 30px;
+  right: 260px;
+  background: #37363661;
+  border-radius: 50%;
+  padding: 3px;
+  opacity: 1;
+  transition: 0.5s ease;
+  cursor: pointer;
+  z-index: 2;
+  align-items: center;
+}
+
+#onTop:hover {
+  background: #999999;
+  transform: translateY(-5px);
 }
