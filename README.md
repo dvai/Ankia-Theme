@@ -1,5 +1,6 @@
 ## Introduction
 Ankia-Theme is a blog theme based on the sharing feature of [Trilium](https://github.com/zadam/trilium), which can help you create a basic and aesthetically pleasing blog website.
+
 Ankia-Theme是一个基于Trilium分享功能的博客主题，通过此主题你能实现在Trilium中创建一个博客站点！
 
 主题预览：[东东的小黑盒](https://www.ankia.top)
