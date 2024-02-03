@@ -1,12 +1,13 @@
 <%
-const slugify = (text) => text.replace(/\s/g, "-");
-const slug = slugify(entry.name);
+const slugify = (text) => text.replace(/\s/g, " ");
+const regex = /(<([^>]+)>)/ig;
+const slug = slugify(entry.name).replace(regex, '')
 %>
 
 
 <li>
     <a href="#<%= slug %>">
-        <%= entry.name %>
+        <%= slug %>
     </a>
 
     <% if (entry.children.length) { %>

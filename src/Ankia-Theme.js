@@ -1,5 +1,5 @@
 /*!
- * Ankia-Theme v1.4
+ * Ankia-Theme v1.5
  * https://ankia.top/
  *
  * Licensed Apache-2.0 © 东东
@@ -149,6 +149,7 @@ document.addEventListener(
   () => {
     const toc = document.getElementById("toc");
     if (!toc) return;
+    const tocHeight = toc.clientHeight;
 
     const sections = document.querySelectorAll(
       "#content h2, #content h3, #content h4, #content h5, #content h6"
@@ -160,21 +161,44 @@ document.addEventListener(
         e.preventDefault();
         e.stopPropagation();
 
-        const target = document.getElementById(link.getAttribute("href").slice(1));
+        const target = document.getElementById(
+          link.getAttribute("href").slice(1)
+        );
         if (target) target.scrollIntoView({ behavior: "smooth" });
       });
     });
 
     function changeLinkState() {
       let index = sections.length;
-      while (--index && window.scrollY < sections[index].offsetTop) { }
+      while (--index && window.scrollY < sections[index].offsetTop) {}
 
       links.forEach((link) => link.classList.remove("tocActive"));
       links[index].classList.add("tocActive");
     }
 
+    function scrollToc() {
+      const toc = document.getElementById("toc-pane");
+      const tocContent = document.getElementById("toc");
+      const tocHeight = parseFloat(
+        window.getComputedStyle(toc).getPropertyValue("max-height")
+      );
+      let activeElement = toc.querySelector(".tocActive");
+      let activeElementPosition = activeElement.offsetTop;
+      if (activeElementPosition > tocHeight - 50) {
+        toc.scrollTo({ top: 9999, behavior: "smooth" });
+      } else if (
+        tocContent.offsetHeight - activeElementPosition >
+        tocHeight - 50
+      ) {
+        toc.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
     changeLinkState();
-    window.addEventListener("scroll", changeLinkState);
+    window.addEventListener("scroll", () => {
+      changeLinkState();
+      setTimeout(scrollToc, 500);
+    });
   },
   false
 );
@@ -238,7 +262,7 @@ document.addEventListener(
     target.addEventListener("click", (e) => {
       window.scrollTo({
         top: 0,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     });
   },
@@ -250,10 +274,82 @@ document.addEventListener(
   () => {
     //字数统计
     const content = document.getElementById("content");
-    if (!content) { return }
+    if (!content) {
+      return;
+    }
     const articleWordCount = document.getElementById("articleWordCount");
-    articleWordCount.innerText = content.innerText.split(/[\s-+:,/\\]+/).filter(chunk => chunk !== '').join('').length;
+    articleWordCount.innerText = content.innerText
+      .split(/[\s-+:,/\\]+/)
+      .filter((chunk) => chunk !== "")
+      .join("").length;
   },
   false
 );
 
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+    const searchContainer = document.getElementById("searchContainer");
+    const searchButton = document.getElementById("searchButton");
+
+    function buildResultItem(result) {
+      return `<a class="searchItems" href="./${result.id}">
+                    <div class="itemsTitle">${result.title}</div>
+                </a>`;
+    }
+    function debounce(executor, delay) {
+      let timeout;
+      return function (...args) {
+        const callback = () => {
+          timeout = null;
+          Reflect.apply(executor, null, args);
+        };
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(callback, delay);
+      };
+    }
+
+    async function performSearch() {
+      const searchTerm = searchInput.value.trim();
+      if (searchTerm !== "") {
+        searchResults.innerHTML = "";
+
+        const ancestor = document.body.dataset.ancestorNoteId;
+        const query = searchInput.value;
+        const resp = await fetch(
+          `api/notes?search=${query}&ancestorNoteId=${ancestor}`
+        );
+        const json = await resp.json();
+        const results = json.results;
+        for (const result of results) {
+          if (result.path.includes("🗓️时间线") === false) {
+            continue;
+          }
+          searchResults.innerHTML += buildResultItem(result);
+        }
+      }
+    }
+    searchButton.addEventListener("click", () => {
+      searchContainer.style.display = "flex";
+    });
+
+    searchInput.addEventListener(
+      "keyup",
+      debounce(async () => {
+        await performSearch();
+      }, 400)
+    );
+
+    document.addEventListener("click", (event) => {
+      if (
+        !event.target.closest("#searchContainer") &&
+        !event.target.closest("#searchButton")
+      ) {
+        searchContainer.style.display = "none";
+      }
+    });
+  },
+  false
+);

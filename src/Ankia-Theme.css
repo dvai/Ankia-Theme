@@ -1,5 +1,5 @@
 /*!
- * Ankia-Theme v1.4
+ * Ankia-Theme v1.5
  * https://ankia.top/
  *
  * Licensed Apache-2.0 © 东东
@@ -347,6 +347,9 @@ a {
     opacity: 0;
     display: none;
   }
+  .searchContainerStyle {
+    width: 80% !important;
+  }
 }
 
 #title {
@@ -641,6 +644,9 @@ iframe.pdf-view {
   animation: fromRightToLeftAppearing 1s ease-in-out;
   border-left: 2px solid #d9dde4;
   padding-left: 15px;
+  margin-right: 15px;
+  max-height: 80vh;
+  overflow: auto;
 }
 
 .tocActive {
@@ -906,6 +912,11 @@ ul#toc {
   text-align: justify;
 }
 
+#latestComment {
+  display: flex;
+  flex-direction: column;
+}
+
 #mobileMenuContainer {
   margin-top: 60px;
   display: none;
@@ -1006,4 +1017,55 @@ ul#toc {
 #onTop:hover {
   background: #999999;
   transform: translateY(-5px);
+}
+
+/*搜索*/
+.searchContainerStyle {
+  position: fixed;
+  top: 80px;
+  display: none;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 5px;
+  flex-direction: column;
+  width: 50%;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 18%);
+  padding: 20px;
+  z-index: 1000;
+  max-height: 60%;
+  overflow: auto;
+  animation: slideIn 0.5s ease-in-out;
+}
+
+#searchInput {
+  border: none;
+  border-bottom: 1px solid blanchedalmond;
+  padding: 5px;
+  width: 90%;
+  outline: none;
+}
+
+.searchItems {
+  font-weight: bold;
+}
+.itemsTitle {
+  margin: 0.4em 0em;
+  padding-left: 0.5em;
+  border-left: 1px solid #d9d3d3;
+}
+.searchItems:hover {
+  color: burlywood;
+}
+
+#searchResults {
+  width: 90%;
+  margin-top: 1em;
+}
+
+#toc-pane::-webkit-scrollbar {
+  width: 1px;
+}
+#toc-pane::-webkit-scrollbar-thumb {
+  background-color: var(--blue);
 }
