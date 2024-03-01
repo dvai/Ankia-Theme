@@ -1,5 +1,5 @@
 /*!
- * Ankia-Theme v1.5
+ * Ankia-Theme v1.6
  * https://ankia.top/
  *
  * Licensed Apache-2.0 © 东东
@@ -350,6 +350,17 @@ document.addEventListener(
         searchContainer.style.display = "none";
       }
     });
+  },
+  false
+);
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    const otherPlatformBar = document.getElementById("otherPlatformBar");
+    if (otherPlatformBar.children.length === 0) {
+      otherPlatformBar.style.display = "none";
+    }
   },
   false
 );
