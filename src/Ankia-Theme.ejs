@@ -457,6 +457,25 @@
         <div id="bloggerInfoName" class="bloggerInfoTitleStyle"><%= bloggerName%></div>
         <div id="motto" class="bloggerInfoContentStyle"><%= subRoot.note.getLabelValue("motto") %></div>
       </div>
+      <%
+      const linkLabels = [
+        "githubLink",
+        "RSSLink",  
+        "zhihuLink",
+        "sspaiLink",
+        "netEaseCloudLink",
+        "bilibiliLink",
+        "doubanLink",
+        "telegramLink", 
+        "mailLink"
+      ];
+      const socialInformationExist =  linkLabels.some(element => {
+        if (subRoot.note.hasLabel(element)){
+          return true;
+        }
+      });
+      %>
+      <% if (socialInformationExist) {%>
       <div id="otherPlatformBar" class="bloggerInfoCardStyle">
         <% if (subRoot.note.hasLabel("githubLink") && subRoot.note.getLabelValue("githubLink")!=null) { %>
         <a class="platformStyle" target="_blank" rel="noopener" title="github" href="<%= subRoot.note.getLabelValue("githubLink") %>"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -528,6 +547,7 @@
         </a>
         <% } %>
       </div>
+      <% } %>
       <div id="announcement" class="bloggerInfoCardStyle">
         <div class="bloggerInfoTitleStyle">公告</div>
         <hr>

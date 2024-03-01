@@ -353,14 +353,3 @@ document.addEventListener(
   },
   false
 );
-
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-    const otherPlatformBar = document.getElementById("otherPlatformBar");
-    if (otherPlatformBar.children.length === 0) {
-      otherPlatformBar.style.display = "none";
-    }
-  },
-  false
-);
